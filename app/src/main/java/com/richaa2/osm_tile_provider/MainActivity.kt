@@ -42,9 +42,9 @@ fun MapScreen() {
     val cameraPositionState = rememberCameraPositionState {
         position = com.google.android.gms.maps.model.CameraPosition.fromLatLngZoom(
             LatLng(
-                50.4501,
-                30.5234
-            ), 12f
+                41.499352497396636,
+                -81.68899938708547
+            ), 16f
         )
     }
 
@@ -64,6 +64,7 @@ class OSMTileProvider : TileProvider {
 
     private fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
         val url = "https://tile.openstreetmap.org/$zoom/$x/$y.png"
+        Log.d("OSM_TILE", "Requesting tile: $url")
         return URL(url)
     }
 
@@ -71,11 +72,18 @@ class OSMTileProvider : TileProvider {
         return try {
             val connection = getTileUrl(x, y, zoom).openConnection()
             connection.setRequestProperty("User-Agent", "OSM-Android-App")
+
+            val contentType = connection.getHeaderField("Content-Type")
+
+            Log.d("OSM_TILE", "Content-Type: $contentType")
+
             val inputStream = connection.getInputStream()
             val data = inputStream.readBytes()
+            Log.d("OSM_TILE", "Received data size: ${data.size}")
             Tile(256, 256, data)
         } catch (e: Exception) {
             TileProvider.NO_TILE
         }
     }
 }
+
