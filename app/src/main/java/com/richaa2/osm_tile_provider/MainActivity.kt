@@ -59,7 +59,7 @@ fun MapScreen() {
         }
     }
 }
-
+// Don`t forget to add the GOOGLE_MAPS_API_KEY in the AndroidManifest.xml file
 class OSMTileProvider : TileProvider {
 
     private fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
